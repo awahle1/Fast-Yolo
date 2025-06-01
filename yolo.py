@@ -70,7 +70,7 @@ def main():
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    benchmark_and_save_video("data/demo_video.mp4", "outputs/baseline/out_x.mp4", complied_model, device)
+    benchmark_and_save_video("data/demo_video.mp4", "outputs/baseline/out_x_non_compiled.mp4", model, device)
 
 
 

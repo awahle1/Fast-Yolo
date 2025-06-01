@@ -1,0 +1,7 @@
+torch
+torchvision
+triton
+onnx
+onnxruntime
+ultralytics
+numpy

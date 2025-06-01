@@ -4,6 +4,8 @@ import time
 from ultralytics import YOLO
 import numpy as np
 import collections
+from onnxruntime.quantization import quantize_dynamic, QuantType
+import onnxruntime as ort
 
 fps_window = 10
 
@@ -64,11 +66,22 @@ def benchmark_and_save_video(in_path, out_path,model, device):
 
 def main():
     model = YOLO("yolov8x.pt")
-    model.to('cuda')
 
-    complied_model = torch.compile(model)
+    model.export(format='onnx', dynamic=True, opset=12)
+    # model.to('cuda')
+
+    # complied_model = torch.compile(model)
+
+    quantize_dynamic(
+        model_input='yolov8x.onnx',
+        model_output='yolov8x_int8.onnx',
+        weight_type=QuantType.QInt8  # or QuantType.QUInt8
+    )
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    session = ort.InferenceSession("yolov8m_int8.onnx")
+    outputs = session.run(None, {"images": input_tensor})
 
     benchmark_and_save_video("data/demo_video.mp4", "outputs/baseline/out_x_non_compiled.mp4", model, device)
 

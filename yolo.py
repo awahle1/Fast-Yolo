@@ -63,12 +63,12 @@ def benchmark_and_save_video(in_path, out_path,model, device):
     print(f"Finished. Saved to {out_path}")
 
 def main():
-    model = YOLO("yolov8l.pt")
+    model = YOLO("yolov8s.pt")
     model.to('cuda')
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    benchmark_and_save_video("data/demo_video.mp4", "outputs/baseline/out.mp4", model, device)
+    benchmark_and_save_video("data/demo_video.mp4", "outputs/baseline/out_small.mp4", model, device)
 
 
 
